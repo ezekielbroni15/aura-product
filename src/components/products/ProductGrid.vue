@@ -10,6 +10,12 @@
       @resetFilters="$emit('resetFilters')"
     />
 
+    <div class="top-action" v-if="showSeeAllButton">
+      <RouterLink to="/products" class="see-all-link"
+        >See All Products</RouterLink
+      >
+    </div>
+
     <div v-if="filteredProducts.length > 0" class="grid">
       <ProductCard
         v-for="product in filteredProducts"
@@ -32,7 +38,6 @@
 import { computed } from "vue";
 import ProductCard from "./ProductCard.vue";
 import ProductFilter from "./ProductFilter.vue";
-import products from "@/data/products";
 
 defineEmits([
   "update:searchTerm",
@@ -42,6 +47,10 @@ defineEmits([
 ]);
 
 const props = defineProps({
+  products: {
+    type: Array,
+    default: () => [],
+  },
   searchTerm: {
     type: String,
     default: "",
@@ -54,10 +63,14 @@ const props = defineProps({
     type: String,
     default: "default",
   },
+  showSeeAllButton: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const filteredProducts = computed(() => {
-  let result = products.filter((product) => {
+  let result = props.products.filter((product) => {
     const matchesSearch = product.title
       .toLowerCase()
       .includes(props.searchTerm.toLowerCase());
@@ -87,6 +100,26 @@ const filteredProducts = computed(() => {
 .product-section {
   padding: 60px;
   background-color: var(--color-white);
+}
+
+.top-action {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 24px;
+}
+
+.see-all-link {
+  display: inline-block;
+  padding: 12px 18px;
+  background-color: var(--color-dark);
+  color: var(--color-white);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.see-all-link:hover {
+  opacity: 0.9;
 }
 
 .grid {
@@ -128,6 +161,15 @@ const filteredProducts = computed(() => {
 @media (max-width: 768px) {
   .product-section {
     padding: 32px 20px;
+  }
+
+  .top-action {
+    justify-content: stretch;
+  }
+
+  .see-all-link {
+    width: 100%;
+    text-align: center;
   }
 
   .grid {

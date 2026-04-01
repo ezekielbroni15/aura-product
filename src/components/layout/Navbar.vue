@@ -3,8 +3,8 @@
     <div class="logo">Aura.</div>
 
     <nav class="nav-links">
-      <a href="#">Home</a>
-      <a href="#">Products</a>
+      <RouterLink to="/">Home</RouterLink>
+      <RouterLink to="/products">Products</RouterLink>
       <a href="#">Categories</a>
       <a href="#">About</a>
       <a href="#">Contact</a>
