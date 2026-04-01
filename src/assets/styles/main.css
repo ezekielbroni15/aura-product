@@ -1,0 +1,57 @@
+:root {
+  --color-primary: #22c7b8;
+  --color-dark: #111827;
+  --color-text: #6b7280;
+  --color-white: #ffffff;
+  --color-bg: #eef3f1;
+  --color-border: #d1d5db;
+  --color-muted-bg: #f8fafc;
+  --color-warning: #f59e0b;
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+
+  --shadow-soft: 0 10px 24px rgba(15, 23, 42, 0.06);
+  --shadow-card: 0 10px 24px rgba(15, 23, 42, 0.08);
+}
+
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Body */
+body {
+  font-family: Arial, sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-dark);
+}
+
+/* Links */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Buttons */
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+}
+
+/* Inputs and selects */
+input,
+select {
+  font-family: inherit;
+  outline: none;
+}
+
+/* Optional container helper */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
