@@ -1,9 +1,11 @@
 <template>
   <section class="all-products-page">
     <div class="page-header">
-      <p class="page-label">OUR COLLECTION</p>
-      <h1>All Products</h1>
-      <p class="page-text">Browse all available products in one place.</p>
+      <SectionTitle
+        label="OUR COLLECTION"
+        title="All Products"
+        text="Browse all available products in one place."
+      />
     </div>
 
     <ProductGrid
@@ -23,6 +25,7 @@
 <script setup>
 import { ref } from "vue";
 import ProductGrid from "@/components/products/ProductGrid.vue";
+import SectionTitle from "@/components/ui/SectionTitle.vue";
 import products from "@/data/products";
 
 const searchTerm = ref("");
@@ -42,51 +45,18 @@ function resetFilters() {
 }
 
 .page-header {
-  padding: 50px 60px 20px;
-  text-align: center;
-}
-
-.page-label {
-  margin-bottom: 12px;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  color: var(--color-primary);
-  text-transform: uppercase;
-}
-
-.page-header h1 {
-  margin-bottom: 14px;
-  font-size: 42px;
-  color: var(--color-dark);
-}
-
-.page-text {
-  font-size: 15px;
-  color: var(--color-text);
+  padding: 50px 60px 10px;
 }
 
 @media (max-width: 992px) {
   .page-header {
-    padding: 40px 32px 20px;
-  }
-
-  .page-header h1 {
-    font-size: 36px;
+    padding: 40px 32px 10px;
   }
 }
 
 @media (max-width: 768px) {
   .page-header {
-    padding: 32px 20px 16px;
-  }
-
-  .page-header h1 {
-    font-size: 30px;
-  }
-
-  .page-text {
-    font-size: 14px;
+    padding: 32px 20px 8px;
   }
 }
 </style>

@@ -10,12 +10,6 @@
       @resetFilters="$emit('resetFilters')"
     />
 
-    <div class="top-action" v-if="showSeeAllButton">
-      <RouterLink to="/products" class="see-all-link"
-        >See All Products</RouterLink
-      >
-    </div>
-
     <div v-if="filteredProducts.length > 0" class="grid">
       <ProductCard
         v-for="product in filteredProducts"
@@ -31,6 +25,15 @@
       <h3>No products found</h3>
       <p>Try changing your search, category, or sort option.</p>
     </div>
+
+    <div
+      v-if="showSeeAllButton && filteredProducts.length > 0"
+      class="bottom-action"
+    >
+      <RouterLink to="/products">
+        <BaseButton variant="secondary"> See All Products </BaseButton>
+      </RouterLink>
+    </div>
   </section>
 </template>
 
@@ -38,6 +41,7 @@
 import { computed } from "vue";
 import ProductCard from "./ProductCard.vue";
 import ProductFilter from "./ProductFilter.vue";
+import BaseButton from "@/components/ui/BaseButton.vue";
 
 defineEmits([
   "update:searchTerm",
@@ -102,26 +106,6 @@ const filteredProducts = computed(() => {
   background-color: var(--color-white);
 }
 
-.top-action {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 24px;
-}
-
-.see-all-link {
-  display: inline-block;
-  padding: 12px 18px;
-  background-color: var(--color-dark);
-  color: var(--color-white);
-  border-radius: var(--radius-sm);
-  font-size: 14px;
-  font-weight: 600;
-}
-
-.see-all-link:hover {
-  opacity: 0.9;
-}
-
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -148,6 +132,12 @@ const filteredProducts = computed(() => {
   color: var(--color-text);
 }
 
+.bottom-action {
+  display: flex;
+  justify-content: center;
+  margin-top: 32px;
+}
+
 @media (max-width: 992px) {
   .product-section {
     padding: 40px 32px;
@@ -163,15 +153,6 @@ const filteredProducts = computed(() => {
     padding: 32px 20px;
   }
 
-  .top-action {
-    justify-content: stretch;
-  }
-
-  .see-all-link {
-    width: 100%;
-    text-align: center;
-  }
-
   .grid {
     grid-template-columns: 1fr;
     gap: 18px;
@@ -183,6 +164,15 @@ const filteredProducts = computed(() => {
 
   .empty-state h3 {
     font-size: 20px;
+  }
+
+  .bottom-action {
+    margin-top: 24px;
+  }
+
+  .see-all-link {
+    width: 100%;
+    text-align: center;
   }
 }
 </style>
