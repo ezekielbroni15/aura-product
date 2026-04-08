@@ -2,13 +2,11 @@
   <div class="filter-section">
     <div class="filter-header">
       <h2>Featured Products</h2>
-      <p>Explore our curated collection of modern essentials.</p>
+      <p>Explore our available product collection.</p>
     </div>
 
     <div class="filter-controls">
       <BaseInput v-model="localSearch" placeholder="Search products..." />
-
-      <BaseSelect v-model="localCategory" :options="categoryOptions" />
 
       <BaseSelect v-model="localSort" :options="sortOptions" />
 
@@ -27,13 +25,11 @@ import BaseSelect from "@/components/ui/BaseSelect.vue";
 
 const props = defineProps({
   searchTerm: String,
-  selectedCategory: String,
   selectedSort: String,
 });
 
 const emit = defineEmits([
   "update:searchTerm",
-  "update:selectedCategory",
   "update:selectedSort",
   "resetFilters",
 ]);
@@ -43,23 +39,10 @@ const localSearch = computed({
   set: (value) => emit("update:searchTerm", value),
 });
 
-const localCategory = computed({
-  get: () => props.selectedCategory,
-  set: (value) => emit("update:selectedCategory", value),
-});
-
 const localSort = computed({
   get: () => props.selectedSort,
   set: (value) => emit("update:selectedSort", value),
 });
-
-const categoryOptions = [
-  { label: "All Categories", value: "All" },
-  { label: "Furniture", value: "Furniture" },
-  { label: "Lighting", value: "Lighting" },
-  { label: "Living Room", value: "Living Room" },
-  { label: "Office", value: "Office" },
-];
 
 const sortOptions = [
   { label: "Sort By", value: "default" },

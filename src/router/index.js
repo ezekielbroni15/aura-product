@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "@/views/HomeView.vue";
 import AllProductsView from "@/views/AllProductsView.vue";
+import ProductDetailsView from "@/views/ProductDetailsView.vue";
 
 const routes = [
   {
@@ -12,6 +13,11 @@ const routes = [
     path: "/products",
     name: "products",
     component: AllProductsView,
+  },
+  {
+    path: "/products/:id",
+    name: "product-details",
+    component: ProductDetailsView,
   },
 ];
 

@@ -5,10 +5,8 @@
     <ProductGrid
       :products="featuredProducts"
       :searchTerm="searchTerm"
-      :selectedCategory="selectedCategory"
       :selectedSort="selectedSort"
       @update:searchTerm="searchTerm = $event"
-      @update:selectedCategory="selectedCategory = $event"
       @update:selectedSort="selectedSort = $event"
       @resetFilters="resetFilters"
       :showSeeAllButton="true"
@@ -28,14 +26,12 @@ import TestimonialsSection from "@/components/sections/TestimonialsSection.vue";
 import products from "@/data/products";
 
 const searchTerm = ref("");
-const selectedCategory = ref("All");
 const selectedSort = ref("default");
 
 const featuredProducts = computed(() => products.slice(0, 4));
 
 function resetFilters() {
   searchTerm.value = "";
-  selectedCategory.value = "All";
   selectedSort.value = "default";
 }
 </script>

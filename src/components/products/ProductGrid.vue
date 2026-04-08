@@ -2,10 +2,8 @@
   <section class="product-section">
     <ProductFilter
       :searchTerm="searchTerm"
-      :selectedCategory="selectedCategory"
       :selectedSort="selectedSort"
       @update:searchTerm="$emit('update:searchTerm', $event)"
-      @update:selectedCategory="$emit('update:selectedCategory', $event)"
       @update:selectedSort="$emit('update:selectedSort', $event)"
       @resetFilters="$emit('resetFilters')"
     />
@@ -14,9 +12,11 @@
       <ProductCard
         v-for="product in filteredProducts"
         :key="product.id"
-        :title="product.title"
-        :category="product.category"
+        :id="product.id"
+        :name="product.name"
+        :description="product.description"
         :price="product.price"
+        :quantity="product.quantity"
         :image="product.image"
       />
     </div>
@@ -43,12 +43,7 @@ import ProductCard from "./ProductCard.vue";
 import ProductFilter from "./ProductFilter.vue";
 import BaseButton from "@/components/ui/BaseButton.vue";
 
-defineEmits([
-  "update:searchTerm",
-  "update:selectedCategory",
-  "update:selectedSort",
-  "resetFilters",
-]);
+defineEmits(["update:searchTerm", "update:selectedSort", "resetFilters"]);
 
 const props = defineProps({
   products: {
@@ -58,10 +53,6 @@ const props = defineProps({
   searchTerm: {
     type: String,
     default: "",
-  },
-  selectedCategory: {
-    type: String,
-    default: "All",
   },
   selectedSort: {
     type: String,
@@ -74,26 +65,18 @@ const props = defineProps({
 });
 
 const filteredProducts = computed(() => {
-  let result = props.products.filter((product) => {
-    const matchesSearch = product.title
-      .toLowerCase()
-      .includes(props.searchTerm.toLowerCase());
-
-    const matchesCategory =
-      props.selectedCategory === "All" ||
-      product.category === props.selectedCategory;
-
-    return matchesSearch && matchesCategory;
-  });
+  let result = props.products.filter((product) =>
+    product.name.toLowerCase().includes(props.searchTerm.toLowerCase()),
+  );
 
   if (props.selectedSort === "priceLowHigh") {
     result.sort((a, b) => a.price - b.price);
   } else if (props.selectedSort === "priceHighLow") {
     result.sort((a, b) => b.price - a.price);
   } else if (props.selectedSort === "nameAZ") {
-    result.sort((a, b) => a.title.localeCompare(b.title));
+    result.sort((a, b) => a.name.localeCompare(b.name));
   } else if (props.selectedSort === "nameZA") {
-    result.sort((a, b) => b.title.localeCompare(a.title));
+    result.sort((a, b) => b.name.localeCompare(a.name));
   }
 
   return result;

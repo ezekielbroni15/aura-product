@@ -11,10 +11,8 @@
     <ProductGrid
       :products="products"
       :searchTerm="searchTerm"
-      :selectedCategory="selectedCategory"
       :selectedSort="selectedSort"
       @update:searchTerm="searchTerm = $event"
-      @update:selectedCategory="selectedCategory = $event"
       @update:selectedSort="selectedSort = $event"
       @resetFilters="resetFilters"
       :showSeeAllButton="false"
@@ -29,12 +27,10 @@ import SectionTitle from "@/components/ui/SectionTitle.vue";
 import products from "@/data/products";
 
 const searchTerm = ref("");
-const selectedCategory = ref("All");
 const selectedSort = ref("default");
 
 function resetFilters() {
   searchTerm.value = "";
-  selectedCategory.value = "All";
   selectedSort.value = "default";
 }
 </script>
