@@ -48,12 +48,16 @@ const products = ref([
   },
 ]);
 
-function addProduct(product) {
-  products.value.push(product);
+function getProducts() {
+  return products;
 }
 
-function deleteProduct(id) {
-  products.value = products.value.filter((product) => product.id !== id);
+function getProductById(id) {
+  return products.value.find((product) => product.id === id);
+}
+
+function addProduct(product) {
+  products.value.push(product);
 }
 
 function updateProduct(updatedProduct) {
@@ -66,4 +70,15 @@ function updateProduct(updatedProduct) {
   }
 }
 
-export { products, addProduct, deleteProduct, updateProduct };
+function deleteProduct(id) {
+  products.value = products.value.filter((product) => product.id !== id);
+}
+
+export {
+  products,
+  getProducts,
+  getProductById,
+  addProduct,
+  updateProduct,
+  deleteProduct,
+};

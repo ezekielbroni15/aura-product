@@ -37,13 +37,13 @@
 import { computed } from "vue";
 import { useRoute } from "vue-router";
 import BaseButton from "@/components/ui/BaseButton.vue";
-import { products } from "@/state/productsState";
+import { getProductById } from "@/state/productsState";
 
 const route = useRoute();
 
 const product = computed(() => {
   const productId = Number(route.params.id);
-  return products.value.find((item) => item.id === productId);
+  return getProductById(productId);
 });
 </script>
 
