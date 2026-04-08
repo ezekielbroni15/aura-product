@@ -13,7 +13,7 @@
       :searchTerm="searchTerm"
       :selectedSort="selectedSort"
       :showSeeAllButton="false"
-      :showDeleteButton="true"
+      :showManageButtons="true"
       @update:searchTerm="searchTerm = $event"
       @update:selectedSort="selectedSort = $event"
       @resetFilters="resetFilters"

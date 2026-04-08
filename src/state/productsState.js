@@ -56,4 +56,14 @@ function deleteProduct(id) {
   products.value = products.value.filter((product) => product.id !== id);
 }
 
-export { products, addProduct, deleteProduct };
+function updateProduct(updatedProduct) {
+  const index = products.value.findIndex(
+    (product) => product.id === updatedProduct.id,
+  );
+
+  if (index !== -1) {
+    products.value[index] = { ...updatedProduct };
+  }
+}
+
+export { products, addProduct, deleteProduct, updateProduct };

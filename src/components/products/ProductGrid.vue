@@ -23,7 +23,11 @@
           :image="product.image"
         />
 
-        <div v-if="showDeleteButton" class="card-actions">
+        <div v-if="showManageButtons" class="card-actions two-buttons">
+          <RouterLink :to="`/products/${product.id}/edit`" class="action-link">
+            <BaseButton variant="secondary"> Edit Product </BaseButton>
+          </RouterLink>
+
           <BaseButton
             variant="dark"
             @click="$emit('deleteProduct', product.id)"
@@ -80,7 +84,7 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-  showDeleteButton: {
+  showManageButtons: {
     type: Boolean,
     default: false,
   },
@@ -124,6 +128,16 @@ const filteredProducts = computed(() => {
 
 .card-actions {
   margin-top: 12px;
+}
+
+.two-buttons {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.action-link {
+  text-decoration: none;
 }
 
 .empty-state {
@@ -170,6 +184,10 @@ const filteredProducts = computed(() => {
   .grid {
     grid-template-columns: 1fr;
     gap: 18px;
+  }
+
+  .two-buttons {
+    flex-direction: column;
   }
 
   .empty-state {
