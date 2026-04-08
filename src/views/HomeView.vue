@@ -6,10 +6,11 @@
       :products="featuredProducts"
       :searchTerm="searchTerm"
       :selectedSort="selectedSort"
+      :showSeeAllButton="true"
+      :showDeleteButton="false"
       @update:searchTerm="searchTerm = $event"
       @update:selectedSort="selectedSort = $event"
       @resetFilters="resetFilters"
-      :showSeeAllButton="true"
     />
 
     <FeaturesSection />

@@ -9,21 +9,34 @@
     />
 
     <div v-if="filteredProducts.length > 0" class="grid">
-      <ProductCard
+      <div
         v-for="product in filteredProducts"
         :key="product.id"
-        :id="product.id"
-        :name="product.name"
-        :description="product.description"
-        :price="product.price"
-        :quantity="product.quantity"
-        :image="product.image"
-      />
+        class="product-item"
+      >
+        <ProductCard
+          :id="product.id"
+          :name="product.name"
+          :description="product.description"
+          :price="product.price"
+          :quantity="product.quantity"
+          :image="product.image"
+        />
+
+        <div v-if="showDeleteButton" class="card-actions">
+          <BaseButton
+            variant="dark"
+            @click="$emit('deleteProduct', product.id)"
+          >
+            Delete Product
+          </BaseButton>
+        </div>
+      </div>
     </div>
 
     <div v-else class="empty-state">
       <h3>No products found</h3>
-      <p>Try changing your search, category, or sort option.</p>
+      <p>Try changing your search or sort option.</p>
     </div>
 
     <div
@@ -43,7 +56,12 @@ import ProductCard from "./ProductCard.vue";
 import ProductFilter from "./ProductFilter.vue";
 import BaseButton from "@/components/ui/BaseButton.vue";
 
-defineEmits(["update:searchTerm", "update:selectedSort", "resetFilters"]);
+defineEmits([
+  "update:searchTerm",
+  "update:selectedSort",
+  "resetFilters",
+  "deleteProduct",
+]);
 
 const props = defineProps({
   products: {
@@ -59,6 +77,10 @@ const props = defineProps({
     default: "default",
   },
   showSeeAllButton: {
+    type: Boolean,
+    default: false,
+  },
+  showDeleteButton: {
     type: Boolean,
     default: false,
   },
@@ -93,6 +115,15 @@ const filteredProducts = computed(() => {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 24px;
+}
+
+.product-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.card-actions {
+  margin-top: 12px;
 }
 
 .empty-state {
@@ -151,11 +182,6 @@ const filteredProducts = computed(() => {
 
   .bottom-action {
     margin-top: 24px;
-  }
-
-  .see-all-link {
-    width: 100%;
-    text-align: center;
   }
 }
 </style>

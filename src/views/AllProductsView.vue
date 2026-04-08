@@ -12,10 +12,12 @@
       :products="products"
       :searchTerm="searchTerm"
       :selectedSort="selectedSort"
+      :showSeeAllButton="false"
+      :showDeleteButton="true"
       @update:searchTerm="searchTerm = $event"
       @update:selectedSort="selectedSort = $event"
       @resetFilters="resetFilters"
-      :showSeeAllButton="false"
+      @deleteProduct="handleDeleteProduct"
     />
   </section>
 </template>
@@ -24,7 +26,7 @@
 import { ref } from "vue";
 import ProductGrid from "@/components/products/ProductGrid.vue";
 import SectionTitle from "@/components/ui/SectionTitle.vue";
-import { products } from "@/state/productsState";
+import { products, deleteProduct } from "@/state/productsState";
 
 const searchTerm = ref("");
 const selectedSort = ref("default");
@@ -32,6 +34,10 @@ const selectedSort = ref("default");
 function resetFilters() {
   searchTerm.value = "";
   selectedSort.value = "default";
+}
+
+function handleDeleteProduct(id) {
+  deleteProduct(id);
 }
 </script>
 
