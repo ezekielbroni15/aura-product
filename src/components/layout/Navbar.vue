@@ -1,16 +1,16 @@
 <template>
   <header class="navbar">
-    <div class="logo">Aura.</div>
+    <RouterLink to="/" class="logo">Aura.</RouterLink>
 
     <nav class="nav-links">
       <RouterLink to="/">Home</RouterLink>
       <RouterLink to="/products">Products</RouterLink>
       <RouterLink to="/add-product">Add Product</RouterLink>
-      <a href="#">About</a>
-      <a href="#">Contact</a>
     </nav>
 
-    <BaseButton variant="primary">Shop Now</BaseButton>
+    <RouterLink to="/products" class="nav-action">
+      <BaseButton variant="primary">View Products</BaseButton>
+    </RouterLink>
   </header>
 </template>
 
@@ -33,6 +33,7 @@ import BaseButton from "@/components/ui/BaseButton.vue";
   font-size: 24px;
   font-weight: 700;
   color: var(--color-dark);
+  text-decoration: none;
 }
 
 .nav-links {
@@ -49,8 +50,13 @@ import BaseButton from "@/components/ui/BaseButton.vue";
   font-weight: 500;
 }
 
-.nav-links a:hover {
+.nav-links a:hover,
+.nav-links a.router-link-active {
   color: var(--color-dark);
+}
+
+.nav-action {
+  text-decoration: none;
 }
 
 @media (max-width: 992px) {
@@ -67,13 +73,17 @@ import BaseButton from "@/components/ui/BaseButton.vue";
   .navbar {
     flex-direction: column;
     align-items: flex-start;
-    padding: 20px 20px;
+    padding: 20px;
   }
 
   .nav-links {
     width: 100%;
     justify-content: flex-start;
     gap: 14px 18px;
+  }
+
+  .nav-action {
+    width: 100%;
   }
 }
 </style>

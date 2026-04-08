@@ -37,7 +37,13 @@ function resetFilters() {
 }
 
 function handleDeleteProduct(id) {
-  deleteProduct(id);
+  const confirmed = window.confirm(
+    "Are you sure you want to delete this product?",
+  );
+
+  if (confirmed) {
+    deleteProduct(id);
+  }
 }
 </script>
 
