@@ -5,7 +5,7 @@
     <nav class="nav-links">
       <RouterLink to="/">Home</RouterLink>
       <RouterLink to="/products">Products</RouterLink>
-      <a href="#">Categories</a>
+      <RouterLink to="/add-product">Add Product</RouterLink>
       <a href="#">About</a>
       <a href="#">Contact</a>
     </nav>

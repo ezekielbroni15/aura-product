@@ -24,7 +24,7 @@
 import { ref } from "vue";
 import ProductGrid from "@/components/products/ProductGrid.vue";
 import SectionTitle from "@/components/ui/SectionTitle.vue";
-import products from "@/data/products";
+import { products } from "@/state/productsState";
 
 const searchTerm = ref("");
 const selectedSort = ref("default");

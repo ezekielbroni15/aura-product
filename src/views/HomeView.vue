@@ -23,12 +23,12 @@ import HeroSection from "@/components/sections/HeroSection.vue";
 import ProductGrid from "@/components/products/ProductGrid.vue";
 import FeaturesSection from "@/components/sections/FeaturesSection.vue";
 import TestimonialsSection from "@/components/sections/TestimonialsSection.vue";
-import products from "@/data/products";
+import { products } from "@/state/productsState";
 
 const searchTerm = ref("");
 const selectedSort = ref("default");
 
-const featuredProducts = computed(() => products.slice(0, 4));
+const featuredProducts = computed(() => products.value.slice(0, 4));
 
 function resetFilters() {
   searchTerm.value = "";
