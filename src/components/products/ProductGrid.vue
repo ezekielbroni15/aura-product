@@ -9,33 +9,19 @@
     />
 
     <div v-if="filteredProducts.length > 0" class="grid">
-      <div
+      <ProductCard
         v-for="product in filteredProducts"
         :key="product.id"
-        class="product-item"
-      >
-        <ProductCard
-          :id="product.id"
-          :name="product.name"
-          :description="product.description"
-          :price="product.price"
-          :quantity="product.quantity"
-          :image="product.image"
-        />
-
-        <div v-if="showManageButtons" class="card-actions two-buttons">
-          <RouterLink :to="`/products/${product.id}/edit`" class="action-link">
-            <BaseButton variant="secondary"> Edit Product </BaseButton>
-          </RouterLink>
-
-          <BaseButton
-            variant="dark"
-            @click="$emit('deleteProduct', product.id)"
-          >
-            Delete Product
-          </BaseButton>
-        </div>
-      </div>
+        :id="product.id"
+        :name="product.name"
+        :description="product.description"
+        :price="product.price"
+        :quantity="product.quantity"
+        :image="product.image"
+        :showManageIcons="showManageIcons"
+        @editProduct="$emit('editProduct', $event)"
+        @deleteProduct="$emit('deleteProduct', $event)"
+      />
     </div>
 
     <div v-else class="empty-state">
@@ -65,6 +51,7 @@ defineEmits([
   "update:selectedSort",
   "resetFilters",
   "deleteProduct",
+  "editProduct",
 ]);
 
 const props = defineProps({
@@ -84,7 +71,7 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-  showManageButtons: {
+  showManageIcons: {
     type: Boolean,
     default: false,
   },
@@ -119,25 +106,6 @@ const filteredProducts = computed(() => {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 24px;
-}
-
-.product-item {
-  display: flex;
-  flex-direction: column;
-}
-
-.card-actions {
-  margin-top: 12px;
-}
-
-.two-buttons {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.action-link {
-  text-decoration: none;
 }
 
 .empty-state {
@@ -184,10 +152,6 @@ const filteredProducts = computed(() => {
   .grid {
     grid-template-columns: 1fr;
     gap: 18px;
-  }
-
-  .two-buttons {
-    flex-direction: column;
   }
 
   .empty-state {

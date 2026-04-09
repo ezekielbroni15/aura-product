@@ -13,21 +13,24 @@
       :searchTerm="searchTerm"
       :selectedSort="selectedSort"
       :showSeeAllButton="false"
-      :showManageButtons="true"
+      :showManageIcons="true"
       @update:searchTerm="searchTerm = $event"
       @update:selectedSort="selectedSort = $event"
       @resetFilters="resetFilters"
       @deleteProduct="handleDeleteProduct"
+      @editProduct="handleEditProduct"
     />
   </section>
 </template>
 
 <script setup>
 import { ref } from "vue";
+import { useRouter } from "vue-router";
 import ProductGrid from "@/components/products/ProductGrid.vue";
 import SectionTitle from "@/components/ui/SectionTitle.vue";
 import { products, deleteProduct } from "@/state/productsState";
 
+const router = useRouter();
 const searchTerm = ref("");
 const selectedSort = ref("default");
 
@@ -44,6 +47,10 @@ function handleDeleteProduct(id) {
   if (confirmed) {
     deleteProduct(id);
   }
+}
+
+function handleEditProduct(id) {
+  router.push(`/products/${id}/edit`);
 }
 </script>
 

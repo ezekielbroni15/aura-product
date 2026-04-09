@@ -1,5 +1,8 @@
 import { ref } from "vue";
 
+const DEFAULT_IMAGE =
+  "https://images.unsplash.com/photo-1493666438817-866a91353ca9?auto=format&fit=crop&w=800&q=80";
+
 const products = ref([
   {
     id: 1,
@@ -57,7 +60,10 @@ function getProductById(id) {
 }
 
 function addProduct(product) {
-  products.value.push(product);
+  products.value.push({
+    ...product,
+    image: product.image || DEFAULT_IMAGE,
+  });
 }
 
 function updateProduct(updatedProduct) {
