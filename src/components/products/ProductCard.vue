@@ -76,6 +76,9 @@
 </template>
 
 <script setup>
+const fallbackImage =
+  "https://images.unsplash.com/photo-1493666438817-866a91353ca9?auto=format&fit=crop&w=800&q=80";
+
 defineProps({
   id: Number,
   name: String,
@@ -90,9 +93,6 @@ defineProps({
 });
 
 defineEmits(["editProduct", "deleteProduct"]);
-
-const fallbackImage =
-  "https://images.unsplash.com/photo-1493666438817-866a91353ca9?auto=format&fit=crop&w=800&q=80";
 </script>
 
 <style scoped>

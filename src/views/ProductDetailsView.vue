@@ -1,8 +1,12 @@
 <template>
-  <section v-if="product" class="details-page">
+  <section v-if="loading" class="not-found">
+    <h2>Loading product...</h2>
+  </section>
+
+  <section v-else-if="product" class="details-page">
     <div class="details-wrapper">
       <div class="details-image">
-        <img :src="product.image" :alt="product.name" />
+        <img :src="product.image || fallbackImage" :alt="product.name" />
       </div>
 
       <div class="details-content">
@@ -34,16 +38,36 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
+import { onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 import BaseButton from "@/components/ui/BaseButton.vue";
-import { getProductById } from "@/state/productsState";
+import { getProductById } from "@/services/productService";
 
 const route = useRoute();
 
-const product = computed(() => {
-  const productId = Number(route.params.id);
-  return getProductById(productId);
+const fallbackImage =
+  "https://images.unsplash.com/photo-1493666438817-866a91353ca9?auto=format&fit=crop&w=800&q=80";
+
+const product = ref(null);
+const loading = ref(false);
+
+async function fetchProduct() {
+  loading.value = true;
+
+  try {
+    const productId = Number(route.params.id);
+    const data = await getProductById(productId);
+    product.value = data;
+  } catch (err) {
+    product.value = null;
+    console.error(err);
+  } finally {
+    loading.value = false;
+  }
+}
+
+onMounted(() => {
+  fetchProduct();
 });
 </script>
 
