@@ -52,29 +52,32 @@
         </div>
 
         <div class="form-actions">
-          <BaseButton variant="primary" type="submit">
-            Save Product
+          <BaseButton variant="primary" type="submit" :disabled="loading">
+            {{ loading ? "Saving..." : "Save Product" }}
           </BaseButton>
         </div>
-      </form>
 
-      <div v-if="submittedProduct" class="preview-card">
-        <h3>Submitted Product Preview</h3>
-        <p><strong>Name:</strong> {{ submittedProduct.name }}</p>
-        <p><strong>Description:</strong> {{ submittedProduct.description }}</p>
-        <p><strong>Price:</strong> ${{ submittedProduct.price }}</p>
-        <p><strong>Quantity:</strong> {{ submittedProduct.quantity }}</p>
-      </div>
+        <p v-if="successMessage" class="success-message">
+          {{ successMessage }}
+        </p>
+
+        <p v-if="errorMessage" class="error-message">
+          {{ errorMessage }}
+        </p>
+      </form>
     </div>
   </section>
 </template>
 
 <script setup>
 import { reactive, ref } from "vue";
+import { useRouter } from "vue-router";
 import BaseButton from "@/components/ui/BaseButton.vue";
 import BaseInput from "@/components/ui/BaseInput.vue";
 import SectionTitle from "@/components/ui/SectionTitle.vue";
-import { products, addProduct } from "@/state/productsState";
+import { addProduct as addProductApi } from "@/services/productService";
+
+const router = useRouter();
 
 const form = reactive({
   name: "",
@@ -83,26 +86,53 @@ const form = reactive({
   quantity: "",
 });
 
-const submittedProduct = ref(null);
+const loading = ref(false);
+const successMessage = ref("");
+const errorMessage = ref("");
 
-function handleSubmit() {
-  const newProduct = {
-    id: products.value.length + 1,
-    name: form.name,
-    description: form.description,
-    price: Number(form.price),
-    quantity: Number(form.quantity),
-    image:
-      "https://images.unsplash.com/photo-1484101403633-562f891dc89a?auto=format&fit=crop&w=800&q=80",
-  };
+async function handleSubmit() {
+  successMessage.value = "";
+  errorMessage.value = "";
 
-  addProduct(newProduct);
-  submittedProduct.value = newProduct;
+  if (
+    !form.name.trim() ||
+    !form.description.trim() ||
+    form.price === "" ||
+    form.quantity === ""
+  ) {
+    errorMessage.value = "Please fill in all fields.";
+    return;
+  }
 
-  form.name = "";
-  form.description = "";
-  form.price = "";
-  form.quantity = "";
+  loading.value = true;
+
+  try {
+    const payload = {
+      name: form.name,
+      description: form.description,
+      price: Number(form.price),
+      quantity: Number(form.quantity),
+    };
+
+    await addProductApi(payload);
+
+    successMessage.value = "Product added successfully.";
+
+    form.name = "";
+    form.description = "";
+    form.price = "";
+    form.quantity = "";
+
+    setTimeout(() => {
+      router.push("/products");
+    }, 800);
+  } catch (err) {
+    console.error("Add product error:", err.response?.data || err);
+    errorMessage.value =
+      err.response?.data?.detail?.[0]?.msg || "Failed to add product.";
+  } finally {
+    loading.value = false;
+  }
 }
 </script>
 
@@ -170,22 +200,18 @@ function handleSubmit() {
   margin-top: 12px;
 }
 
-.preview-card {
-  margin-top: 24px;
-  background-color: var(--color-white);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: 24px;
+.success-message {
+  margin-top: 16px;
+  color: #16a34a;
+  font-size: 14px;
+  font-weight: 600;
 }
 
-.preview-card h3 {
-  margin: 0 0 14px;
-  color: var(--color-dark);
-}
-
-.preview-card p {
-  margin: 0 0 10px;
-  color: var(--color-text);
+.error-message {
+  margin-top: 16px;
+  color: #dc2626;
+  font-size: 14px;
+  font-weight: 600;
 }
 
 @media (max-width: 992px) {
