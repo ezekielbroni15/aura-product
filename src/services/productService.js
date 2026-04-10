@@ -1,7 +1,9 @@
 import axios from "axios";
 
+const BASE_URL = "https://b0c0-197-251-192-177.ngrok-free.app";
+
 const api = axios.create({
-  baseURL: "https://b0c0-197-251-192-177.ngrok-free.app",
+  baseURL: BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },
@@ -23,7 +25,9 @@ export async function addProduct(productData) {
 }
 
 export async function updateProduct(id, productData) {
-  const response = await api.put(`/product/${id}`, productData);
+  const response = await api.put("/product", productData, {
+    params: { id },
+  });
   return response.data;
 }
 

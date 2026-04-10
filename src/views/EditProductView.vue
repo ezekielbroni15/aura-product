@@ -1,5 +1,9 @@
 <template>
-  <section v-if="product" class="edit-product-page">
+  <section v-if="loading" class="not-found">
+    <h2>Loading product...</h2>
+  </section>
+
+  <section v-else-if="productLoaded" class="edit-product-page">
     <div class="page-header">
       <SectionTitle
         label="PRODUCT MANAGEMENT"
@@ -52,14 +56,22 @@
         </div>
 
         <div class="form-actions">
-          <BaseButton variant="primary" type="submit">
-            Update Product
+          <BaseButton variant="primary" type="submit" :disabled="saving">
+            {{ saving ? "Updating..." : "Update Product" }}
           </BaseButton>
 
           <RouterLink to="/products" class="back-link">
             <BaseButton variant="secondary" type="button"> Cancel </BaseButton>
           </RouterLink>
         </div>
+
+        <p v-if="successMessage" class="success-message">
+          {{ successMessage }}
+        </p>
+
+        <p v-if="errorMessage" class="error-message">
+          {{ errorMessage }}
+        </p>
       </form>
     </div>
   </section>
@@ -74,20 +86,24 @@
 </template>
 
 <script setup>
-import { computed, reactive, watchEffect } from "vue";
+import { onMounted, reactive, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import BaseButton from "@/components/ui/BaseButton.vue";
 import BaseInput from "@/components/ui/BaseInput.vue";
 import SectionTitle from "@/components/ui/SectionTitle.vue";
-import { products, updateProduct } from "@/state/productsState";
+import {
+  getProductById,
+  updateProduct as updateProductApi,
+} from "@/services/productService";
 
 const route = useRoute();
 const router = useRouter();
 
-const product = computed(() => {
-  const productId = Number(route.params.id);
-  return products.value.find((item) => item.id === productId);
-});
+const loading = ref(false);
+const saving = ref(false);
+const productLoaded = ref(false);
+const successMessage = ref("");
+const errorMessage = ref("");
 
 const form = reactive({
   id: null,
@@ -95,32 +111,78 @@ const form = reactive({
   description: "",
   price: "",
   quantity: "",
-  image: "",
 });
 
-watchEffect(() => {
-  if (product.value) {
-    form.id = product.value.id;
-    form.name = product.value.name;
-    form.description = product.value.description;
-    form.price = product.value.price;
-    form.quantity = product.value.quantity;
-    form.image = product.value.image;
+async function fetchProduct() {
+  loading.value = true;
+  errorMessage.value = "";
+
+  try {
+    const productId = Number(route.params.id);
+    const data = await getProductById(productId);
+
+    if (data) {
+      form.id = data.id;
+      form.name = data.name;
+      form.description = data.description;
+      form.price = data.price;
+      form.quantity = data.quantity;
+      productLoaded.value = true;
+    } else {
+      productLoaded.value = false;
+    }
+  } catch (err) {
+    productLoaded.value = false;
+    errorMessage.value = "Failed to load product.";
+    console.error("Load product error:", err.response?.data || err);
+  } finally {
+    loading.value = false;
   }
-});
-
-function handleSubmit() {
-  updateProduct({
-    id: form.id,
-    name: form.name,
-    description: form.description,
-    price: Number(form.price),
-    quantity: Number(form.quantity),
-    image: form.image,
-  });
-
-  router.push("/products");
 }
+
+async function handleSubmit() {
+  successMessage.value = "";
+  errorMessage.value = "";
+
+  if (
+    !form.name.trim() ||
+    !form.description.trim() ||
+    form.price === "" ||
+    form.quantity === ""
+  ) {
+    errorMessage.value = "Please fill in all fields.";
+    return;
+  }
+
+  saving.value = true;
+
+  try {
+    const payload = {
+      name: form.name,
+      description: form.description,
+      price: Number(form.price),
+      quantity: Number(form.quantity),
+    };
+
+    await updateProductApi(form.id, payload);
+
+    successMessage.value = "Product updated successfully.";
+
+    setTimeout(() => {
+      router.push("/products");
+    }, 800);
+  } catch (err) {
+    console.error("Update product error:", err.response?.data || err);
+    errorMessage.value =
+      err.response?.data?.detail?.[0]?.msg || "Failed to update product.";
+  } finally {
+    saving.value = false;
+  }
+}
+
+onMounted(() => {
+  fetchProduct();
+});
 </script>
 
 <style scoped>
@@ -192,6 +254,20 @@ function handleSubmit() {
 
 .back-link {
   text-decoration: none;
+}
+
+.success-message {
+  margin-top: 16px;
+  color: #16a34a;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.error-message {
+  margin-top: 16px;
+  color: #dc2626;
+  font-size: 14px;
+  font-weight: 600;
 }
 
 .not-found {
