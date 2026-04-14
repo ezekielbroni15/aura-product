@@ -8,7 +8,6 @@
 
     <div class="card-body">
       <div class="card-top-row">
-        <p class="product-id">Product ID: {{ id }}</p>
 
         <div v-if="showManageIcons" class="card-icons">
           <button
